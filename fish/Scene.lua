@@ -10,15 +10,15 @@ end
 
 function callTree(root, name, ...)
   safeCall(root.ref, name, ...)
-  for _, child in pairs(root._children) do
-    safeCall(child.ref, name, ...)
+  for _, child in pairs(root.children) do
+    callTree(child, name, ...)
   end
 end
 
 local Scene = class('Scene')
 
 function Scene:__init()
-  self._children = {}
+  self.children = {}
   self._entities = {}
   self._nodeMap = {}
 end
@@ -55,7 +55,7 @@ function Scene:insert(entity, parent)
     node.parent = n
     table.insert(n.children, node)
   else
-    table.insert(self._children, node)
+    table.insert(self.children, node)
   end
   self._nodeMap[entity] = node
   self:addEntity(entity)
