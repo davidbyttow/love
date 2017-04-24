@@ -50,7 +50,7 @@ function simulate(e, entityMap, dt)
   for otherType, others in pairs(entityMap) do
     if otherType ~= 'Tank' then
       checkAgainstGroup(e, nextAabb, others, collisions)
-    elseif e:type() == 'Player' then
+    elseif bit.bor(e.collisionMask, PhysicsType.WALL) then
       for _, tank in pairs(others) do
         local tankAabb = tank:boundingBox()
         if nextAabb.left < tankAabb.left or nextAabb:right() > tankAabb:right() then

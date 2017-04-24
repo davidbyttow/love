@@ -1,5 +1,9 @@
 local Vec = class('Vec')
 
+local function isVector(t)
+  return class.type(t) == 'Vec'
+end
+
 function Vec:__init(x, y)
   self.x = x or 0
   self.y = y or 0
@@ -11,6 +15,15 @@ end
 
 function Vec.__sub(a, b)
   return Vec(a.x - b.x, a.y - b.y)
+end
+
+function Vec.__mul(a, b)
+  if type(a) == "number" and isVector(b) then
+    return Vec(b.x * a, b.y * a)
+  elseif type(b) == "number" and isVector(a) then
+    return Vec(a.x * b, a.y * b)
+  end
+  error("Type mismatch: vector and number expected", 2)
 end
 
 function Vec.__unm(a)

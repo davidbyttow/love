@@ -3,6 +3,7 @@ local Entity = require 'Entity'
 local Sprite = require 'Sprite'
 local Size = require 'Size'
 local Vec = require 'Vec'
+local fish = require 'Fish'
 
 local Player = class('Player', 'Entity')
 
@@ -14,10 +15,10 @@ local TERMINAL_VELOCITY = 400
 
 function Player:__init()
   Player.super().__init(self)
-  self.size = Size(48, 48)
   self.gravity = 0
   self.physicsType = PhysicsType.PLAYER
   self.collisionMask = bit.bor(PhysicsType.ENEMY)
+  fish.setSizeLevel(self, 6)
 end
 
 function Player:load()
@@ -30,7 +31,8 @@ function Player:onKeyPress(key)
 end
 
 function Player:handleTouch(collision)
-  print('oh shit man', collision.other.id)
+  collision.other.vel = self.vel * 0.5
+  self.vel = self.vel * -0.5
 end
 
 function Player:update(dt)
