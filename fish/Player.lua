@@ -18,6 +18,7 @@ function Player:__init()
   self.size = Size(48, 48)
   self.gravity = 0
   self._sprite = Sprite()
+  self._elapsed = 0
 end
 
 function Player:load()
@@ -30,6 +31,7 @@ end
 
 function Player:update(dt)
   self._sprite:update(dt)
+  self._elapsed = self._elapsed + dt
 
   if love.keyboard.isDown('right') then
     self.accel.x = SWIM_ACCEL

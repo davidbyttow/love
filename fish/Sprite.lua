@@ -71,7 +71,6 @@ function Sprite:draw(pos, size)
     left = left + size.height
   end
 
-
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
   if anim then
     local frame = math.ceil(math.fmod(self._animElapsed * anim.frames, anim.frames))
