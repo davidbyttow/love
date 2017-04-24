@@ -1,5 +1,4 @@
 local physics = require 'physics'
-local class = require 'class'
 
 function safeCall(obj, name, ...)
   if obj and obj[name] then
@@ -36,7 +35,7 @@ function Scene:draw()
   callTree(self, 'draw')
 end
 
-function Scene:addEntity(entity)
+function Scene:_addEntity(entity)
   local type = entity:type()
   if not self._entities[type] then
     self._entities[type] = {}
@@ -58,7 +57,8 @@ function Scene:insert(entity, parent)
     table.insert(self.children, node)
   end
   self._nodeMap[entity] = node
-  self:addEntity(entity)
+  self:_addEntity(entity)
+  entity.scene = self
 end
 
 return Scene

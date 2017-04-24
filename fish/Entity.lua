@@ -20,6 +20,7 @@ function Entity:__init()
   self.gravity = GRAVITY
   self.active = true
   self.collisionMask = 0
+  self.scene = nil
 end
 
 function Entity:collidesWith(other)
@@ -32,6 +33,13 @@ end
 
 function Entity:boundingBox()
   return Entity.toBoundingBox(self.pos, self.size)
+end
+
+function Entity:addChild(entity)
+  self.scene:insert(entity, self)
+end
+
+function Entity:removeChild(entity)
 end
 
 return Entity

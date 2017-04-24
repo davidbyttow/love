@@ -78,7 +78,6 @@ function simulate(e, entityMap, dt)
   end
   if not cv then
     e.pos.y = nextPos.y
-    print(e.pos.y)
   end
 end
 

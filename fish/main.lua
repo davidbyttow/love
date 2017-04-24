@@ -1,6 +1,5 @@
 -- Global definitions for use everywhere
-require 'const'
-class = require 'class'
+require 'globals'
 
 local Scene = require 'Scene'
 local Tank = require 'Tank'
