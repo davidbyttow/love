@@ -37,7 +37,7 @@ function Scene:draw()
 end
 
 function Scene:addEntity(entity)
-  local type = entity:class().name
+  local type = entity:type()
   if not self._entities[type] then
     self._entities[type] = {}
   end

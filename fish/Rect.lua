@@ -15,4 +15,11 @@ function Rect:bottom()
   return self.top + self.height
 end
 
+function Rect:overlaps(other)
+	return self.left + self.width > other.left
+    and self.left < other.left + other.width
+    and self.top + self.height > other.top
+    and self.top < other.top + other.height
+end
+
 return Rect
