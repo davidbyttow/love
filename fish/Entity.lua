@@ -6,7 +6,7 @@ local Entity = class('Entity')
 function Entity.toBoundingBox(pos, size)
   return Rect(
     pos.x - size.width * 0.5,
-    pos.y - size.height,
+    pos.y - size.height * 0.5,
     size.width,
     size.height)
 end
@@ -33,13 +33,6 @@ end
 
 function Entity:boundingBox()
   return Entity.toBoundingBox(self.pos, self.size)
-end
-
-function Entity:addChild(entity)
-  self.scene:insert(entity, self)
-end
-
-function Entity:removeChild(entity)
 end
 
 return Entity

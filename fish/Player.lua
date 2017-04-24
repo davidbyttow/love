@@ -15,24 +15,28 @@ local TERMINAL_VELOCITY = 400
 function Player:__init()
   Player.super().__init(self)
   self.color = Color(80, 0, 0)
-  self.size = Size(40, 40)
+  self.size = Size(48, 48)
   self.gravity = 0
   self._sprite = Sprite()
-  self._sprite = Color(0, 0, 0)
 end
 
 function Player:load()
-  self:addChild(self._sprite)
+  self._sprite:loadAnim('assets/red_fish.png', 'idle', 0, 96, 4, 4)
+  self._sprite:playAnim('idle')
 end
 
 function Player:onKeyPress(key)
 end
 
 function Player:update(dt)
+  self._sprite:update(dt)
+
   if love.keyboard.isDown('right') then
     self.accel.x = SWIM_ACCEL
+    self._sprite.flipX = false
   elseif love.keyboard.isDown('left') then
     self.accel.x = -SWIM_ACCEL
+    self._sprite.flipX = true
   elseif love.keyboard.isDown('up') then
     self.accel.y = -SWIM_ACCEL
   elseif love.keyboard.isDown('down') then
@@ -63,7 +67,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-  self._sprite.draw()
+  self._sprite:draw(self.pos, self.size)
 end
 
 return Player

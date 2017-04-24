@@ -10,7 +10,7 @@ local width, height, _ = love.window.getMode()
 
 function Tank:__init()
   self.super().__init(self)
-  self.pos = Vec(width * 0.5, height)
+  self.pos = Vec(width * 0.5, height * 0.5)
   self.size = Size(width, height)
   self.static = true
 
@@ -19,13 +19,13 @@ function Tank:__init()
 end
 
 function Tank:load()
-  self:addChild(self._sprite)
 end
 
 function Tank:update(dt)
 end
 
 function Tank:draw()
+  self._sprite:draw(self.pos, self.size)
 end
 
 return Tank

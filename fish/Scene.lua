@@ -58,7 +58,6 @@ function Scene:insert(entity, parent)
   end
   self._nodeMap[entity] = node
   self:_addEntity(entity)
-  entity.scene = self
 end
 
 return Scene
