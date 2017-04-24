@@ -3,40 +3,34 @@ local Vec = require 'Vec'
 
 local physics = class('Physics')
 
-function checkForCollision(e, aabb, other)
+function checkForCollision(e, aabb, other, collisions)
   local ch = false
   local cv = false
   local otherAabb = Entity.toBoundingBox(other.pos, other.size)
   if aabb:overlaps(otherAabb) then
-    ch = true
-    cv = true
+    table.insert(collisions, e.id, {
+      entity = e,
+      other = other,
+      horizontal = h,
+      vertical = v,
+      dir = (other.pos - e.pos):normal(),
+    })
   end
   return ch, cv
 end
 
-function checkAgainstGroup(e, aabb, others)
-  local ch = false
-  local cv = false
+function checkAgainstGroup(e, aabb, others, collisions)
   for _, other in pairs(others) do
     if e ~= other and other.active and e:collidesWith(other) then
-      local h, v = checkForCollision(e, aabb, other)
-      ch = h or ch
-      cv = v or cv
-    end
-    if ch and cv then
-      break
+      checkForCollision(e, aabb, other, collisions)
     end
   end
-  return ch, cv
 end
 
 function simulate(e, entityMap, dt)
   if e.static or not e.active then
     return
   end
-
-  local ch = false
-  local cv = false
 
   -- Apply acceleration
   e.vel.x = e.vel.x + e.accel.x * dt
@@ -49,12 +43,13 @@ function simulate(e, entityMap, dt)
 
   local nextAabb = Entity.toBoundingBox(nextPos, e.size)
 
-  -- Check collisions
+  -- Gather collisions
+  local collisions = {}
+  local ch = false
+  local cv = false
   for otherType, others in pairs(entityMap) do
     if otherType ~= 'Tank' then
-      h, v = checkAgainstGroup(e, nextAabb, others)
-      ch = h or ch
-      cv = v or cv
+      checkAgainstGroup(e, nextAabb, others, collisions)
     elseif e:type() == 'Player' then
       for _, tank in pairs(others) do
         local tankAabb = tank:boundingBox()
@@ -69,6 +64,17 @@ function simulate(e, entityMap, dt)
           cv = true
         end
       end
+    end
+  end
+
+  -- Handle touch events
+  for _, collision in pairs(collisions) do
+    e:handleTouch(collision)
+    if collision.ch then
+      ch = true
+    end
+    if collision.cv then
+      cv = true
     end
   end
 

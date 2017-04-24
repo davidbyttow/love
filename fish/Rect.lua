@@ -1,3 +1,5 @@
+local Vec = require 'Vec'
+
 local Rect = class('Rect')
 
 function Rect:__init(left, top, width, height)
@@ -13,6 +15,10 @@ end
 
 function Rect:bottom()
   return self.top + self.height
+end
+
+function Rect:center()
+  return Vec(self.left + self.width * 0.5, self.top + self.height * 0.5)
 end
 
 function Rect:overlaps(other)

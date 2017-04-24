@@ -5,6 +5,61 @@ function Vec:__init(x, y)
   self.y = y or 0
 end
 
+function Vec.__add(a, b)
+  return Vec(a.x + b.x, a.y + b.y)
+end
+
+function Vec.__sub(a, b)
+  return Vec(a.x - b.x, a.y - b.y)
+end
+
+function Vec.__unm(a)
+	return new(-a.x, -a.y)
+end
+
+function Vec:__tostring()
+	return "("..tonumber(self.x)..","..tonumber(self.y)..")"
+end
+
+function Vec:clone()
+  return Vec(self.x, self.y)
+end
+
+function Vec:unpack()
+  return self.x, self.y
+end
+
+function Vec:len()
+  return math.sqrt(self:len2())
+end
+
+function Vec:len2()
+  return self.x * self.x + self.y * self.y
+end
+
+function Vec.dist(a, b)
+  return math.sqrt(Vec.dist2(a, b))
+end
+
+function Vec.dist2(a, b)
+  local dx = a.x - b.x
+  local dy = a.y - b.y
+  return dx * dx + dy * dy
+end
+
+function Vec:normalize()
+  local len = self:len()
+  if len > 0 then
+    self.x = self.x / len
+    self.y = self.y / len
+  end
+  return self
+end
+
+function Vec:normal()
+  return self:clone():normalize()
+end
+
 function Vec:signs()
   local v = Vec(0, 0)
   if self.x > 0 then

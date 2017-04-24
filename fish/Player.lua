@@ -14,14 +14,14 @@ local TERMINAL_VELOCITY = 400
 
 function Player:__init()
   Player.super().__init(self)
-  self.color = Color(80, 0, 0)
   self.size = Size(48, 48)
   self.gravity = 0
-  self._sprite = Sprite()
-  self._elapsed = 0
+  self.physicsType = PhysicsType.PLAYER
+  self.collisionMask = bit.bor(PhysicsType.ENEMY)
 end
 
 function Player:load()
+  self._sprite = Sprite()
   self._sprite:loadAnim('assets/red_fish.png', 'idle', 0, 96, 4, 4)
   self._sprite:playAnim('idle')
 end
@@ -29,9 +29,12 @@ end
 function Player:onKeyPress(key)
 end
 
+function Player:handleTouch(collision)
+  print('oh shit man', collision.other.id)
+end
+
 function Player:update(dt)
   self._sprite:update(dt)
-  self._elapsed = self._elapsed + dt
 
   if love.keyboard.isDown('right') then
     self.accel.x = SWIM_ACCEL

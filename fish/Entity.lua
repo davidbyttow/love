@@ -11,7 +11,12 @@ function Entity.toBoundingBox(pos, size)
     size.height)
 end
 
+local nextId = 0
+
 function Entity:__init()
+  self.id = nextId
+  nextId = nextId + 1
+
   self.pos = Vec(0, 0)
   self.vel = Vec(0, 0)
   self.accel = Vec(0, 0)
@@ -19,12 +24,15 @@ function Entity:__init()
   self.static = false
   self.gravity = GRAVITY
   self.active = true
+  self.physicsType = 0
   self.collisionMask = 0
-  self.scene = nil
 end
 
 function Entity:collidesWith(other)
-  return bit.band(self.collisionMask, other.collisionMask) > 0
+  return bit.band(self.collisionMask, other.physicsType) > 0
+end
+
+function Entity:handleTouch(collision)
 end
 
 function Entity:type()
