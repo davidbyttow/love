@@ -27,7 +27,7 @@ function Vec.__mul(a, b)
 end
 
 function Vec.__unm(a)
-	return new(-a.x, -a.y)
+	return Vec(-a.x, -a.y)
 end
 
 function Vec:__tostring()

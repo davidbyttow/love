@@ -6,15 +6,17 @@ local Player = require 'Player'
 local Scene = require 'Scene'
 local Size = require 'Size'
 local Tank = require 'Tank'
+local UI = require 'UI'
 local Vec = require 'Vec'
 
 local scene = Scene()
 local tank = Tank()
 local player = Player()
+local UI = UI()
 
 local NUM_QUADS = 10
-local NUM_ENEMIES = 5
-local MAX_ENEMY_LEVEL = 9
+local NUM_ENEMIES = 12
+local MAX_ENEMY_LEVEL = 10
 
 local SEED = 1
 -- local SEED = os.time()
@@ -24,6 +26,12 @@ function generateEnemies(count)
   local quadSize = Size(tankBounds.width / NUM_QUADS,
     tankBounds.height / NUM_QUADS)
   local selected = {}
+  for i = 4, 6 do
+    for j = 4, 6 do
+      local index = i * 10 + j
+      selected[index] = true
+    end
+  end
 
   for i = 1, count do
     local enemy = Enemy()
@@ -32,6 +40,7 @@ function generateEnemies(count)
     while index < 0 or selected[index] do
       index = math.random(0, NUM_QUADS * NUM_QUADS - 1)
     end
+    print(index)
     selected[index] = true
 
     local hi = index % NUM_QUADS
@@ -56,6 +65,8 @@ function love.load()
 	scene:insert(player, tank)
 
   generateEnemies(NUM_ENEMIES)
+
+  scene:insert(UI)
 
 	scene:load()
   love.graphics.setBackgroundColor(255, 255, 255)

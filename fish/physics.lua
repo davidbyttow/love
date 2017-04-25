@@ -4,19 +4,17 @@ local Vec = require 'Vec'
 local physics = class('Physics')
 
 function checkForCollision(e, aabb, other, collisions)
-  local ch = false
-  local cv = false
   local otherAabb = Entity.toBoundingBox(other.pos, other.size)
   if aabb:overlaps(otherAabb) then
+    local dir = (other.pos - e.pos):normal()
     table.insert(collisions, e.id, {
       entity = e,
       other = other,
-      horizontal = h,
-      vertical = v,
-      dir = (other.pos - e.pos):normal(),
+      dir = dir,
+      ch = true,
+      cv = true,
     })
   end
-  return ch, cv
 end
 
 function checkAgainstGroup(e, aabb, others, collisions)
@@ -69,7 +67,20 @@ function simulate(e, entityMap, dt)
 
   -- Handle touch events
   for _, collision in pairs(collisions) do
-    e:handleTouch(collision)
+    collision.entity:handleTouch(collision)
+
+    local otherCollision = {
+      entity = collision.other,
+      other = collision.entity,
+      dir = -collision.dir,
+      ch = collision.ch,
+      cv = collision.cv,
+    }
+    otherCollision.entity:handleTouch(otherCollision)
+
+    collision.other.vel = collision.entity.vel * 0.5
+    collision.entity.vel = collision.entity.vel * -0.5
+
     if collision.ch then
       ch = true
     end

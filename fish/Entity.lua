@@ -29,6 +29,15 @@ function Entity:__init()
   self.collisionMask = 0
 end
 
+function Entity:load()
+end
+
+function Entity:update(dt)
+end
+
+function Entity:draw()
+end
+
 function Entity:collidesWith(other)
   return bit.band(self.collisionMask, other.physicsType) > 0
 end

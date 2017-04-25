@@ -45,7 +45,7 @@ function Scene:update(dt)
     end
   end)
   for _, e in pairs(toRemove) do
-    self:removeEntity(e)
+    self:_removeEntity(e)
   end
   physics.update(self._entities, dt)
 end
