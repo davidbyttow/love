@@ -2,7 +2,6 @@
 require 'globals'
 
 local Enemy = require 'Enemy'
-local fish = require 'fish'
 local Player = require 'Player'
 local Scene = require 'Scene'
 local Size = require 'Size'
@@ -14,7 +13,8 @@ local tank = Tank()
 local player = Player()
 
 local NUM_QUADS = 10
-local NUM_ENEMIES = 1
+local NUM_ENEMIES = 5
+local MAX_ENEMY_LEVEL = 9
 
 local SEED = 1
 -- local SEED = os.time()
@@ -41,7 +41,7 @@ function generateEnemies(count)
       tankBounds.left + hi * quadSize.width + quadSize.width * 0.5,
       tankBounds.top + vi * quadSize.height + quadSize.height * 0.5)
     enemy.pos = pos
-    fish.setSizeLevel(enemy, math.random(0, 8))
+    enemy:setSizeLevel( math.random(0, MAX_ENEMY_LEVEL))
     scene:insert(enemy, tank)
   end
 end

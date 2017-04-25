@@ -1,19 +1,15 @@
 local Color = require 'Color'
-local Entity = require 'Entity'
+local Fish = require 'Fish'
 local Sprite = require 'Sprite'
 local Size = require 'Size'
 local Vec = require 'Vec'
-local fish = require 'fish'
 
-local Enemy = class('Enemy', 'Entity')
+local Enemy = class('Enemy', 'Fish')
 
 function Enemy:__init()
   Enemy.super().__init(self)
-  self.color = Color(80, 0, 0)
-  self.gravity = 0
   self.physicsType = PhysicsType.ENEMY
   self.collisionMask = bit.bor(PhysicsType.ENEMY)
-  fish.setSizeLevel(self, 0)
 end
 
 function Enemy:load()

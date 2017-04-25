@@ -14,6 +14,7 @@ function Sprite:__init(size)
   self._defaultImage = nil
   self._activeAnim = nil
   self._animElapsed = 0
+  self._animFrame = 0
 end
 
 function Sprite:loadImage(file)
@@ -45,20 +46,30 @@ function Sprite:loadAnim(file, name, column, size, frames, fps)
   self._anims[name] = anim
 end
 
-function Sprite:playAnim(name, fps)
-  fps = fps or 0
+function Sprite:playAnim(name, callback)
   self._activeAnim = self._anims[name]
   self._animElapsed = 0
+  self._animCallback = callback
+  self._animFrame = 1
 end
 
 function Sprite:update(dt)
   self._animElapsed = self._animElapsed + dt
+  local anim = self._activeAnim
+  if anim then
+    local progress = self._animElapsed * anim.fps
+    if progress >= anim.frames and self._animCallback then
+      self._animFrame = anim.frames
+      self._animCallback()
+    else
+      self._animFrame = math.ceil(math.fmod(progress, anim.frames))
+    end
+  end
 end
 
 function Sprite:draw(pos, size)
   local left = pos.x - size.width * 0.5
   local top = pos.y - size.height * 0.5
-  local anim = self._activeAnim
 
   local scaleX = 1
   if self.flipX then
@@ -72,12 +83,12 @@ function Sprite:draw(pos, size)
   end
 
   love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+  local anim = self._activeAnim
   if anim then
-    local frame = math.ceil(math.fmod(self._animElapsed * anim.frames, anim.frames))
     local image = anim.image
     local sx = size.width / anim.size * scaleX
     local sy = size.height / anim.size * scaleY
-    love.graphics.draw(image, anim.quads[frame], left, top, 0, sx, sy)
+    love.graphics.draw(image, anim.quads[self._animFrame], left, top, 0, sx, sy)
   elseif self._defaultImage then
     local sx = size.width / self._defaultImage:getWidth() * scaleX
     local sy = size.height / self._defaultImage:getHeight() * scaleY

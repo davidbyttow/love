@@ -17,6 +17,7 @@ function Entity:__init()
   self.id = nextId
   nextId = nextId + 1
 
+  self.mass = 1
   self.pos = Vec(0, 0)
   self.vel = Vec(0, 0)
   self.accel = Vec(0, 0)
@@ -33,6 +34,12 @@ function Entity:collidesWith(other)
 end
 
 function Entity:handleTouch(collision)
+end
+
+function Entity:kill()
+  self.active = false
+  self.dead = true
+  self.static = true
 end
 
 function Entity:type()
