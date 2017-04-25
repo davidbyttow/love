@@ -12,14 +12,12 @@ local Vec = require 'Vec'
 local scene = Scene()
 local tank = Tank()
 local player = Player()
-local UI = UI()
+local ui = UI()
 
 local NUM_QUADS = 10
-local NUM_ENEMIES = 12
-local MAX_ENEMY_LEVEL = 10
 
-local SEED = 1
--- local SEED = os.time()
+--local SEED = 1
+local SEED = os.time()
 
 function generateEnemies(count)
   local tankBounds = tank:boundingBox()
@@ -40,7 +38,6 @@ function generateEnemies(count)
     while index < 0 or selected[index] do
       index = math.random(0, NUM_QUADS * NUM_QUADS - 1)
     end
-    print(index)
     selected[index] = true
 
     local hi = index % NUM_QUADS
@@ -55,8 +52,11 @@ function generateEnemies(count)
   end
 end
 
-function love.load()
-  math.randomseed(SEED)
+function init()
+  scene = Scene()
+  tank = Tank()
+  player = Player()
+  ui = UI()
 
   scene:insert(tank)
 
@@ -66,16 +66,26 @@ function love.load()
 
   generateEnemies(NUM_ENEMIES)
 
-  scene:insert(UI)
+  scene:insert(ui)
 
 	scene:load()
   love.graphics.setBackgroundColor(255, 255, 255)
 end
 
+function love.load()
+  math.randomseed(SEED)
+
+  init()
+end
+
 local active = true
 
 function love.keypressed(key)
-  player:onKeyPress(key)
+  if not player.dead then
+    player:onKeyPress(key)
+  elseif key == 'escape' then
+    init()
+  end
 end
 
 function love.update(dt)

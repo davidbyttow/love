@@ -1,5 +1,7 @@
 
 GRAVITY = 80
+NUM_ENEMIES = 12
+MAX_ENEMY_LEVEL = 10
 
 PhysicsType = {
   PLAYER = 1,
